@@ -2,7 +2,7 @@ from typing import List, Union, Dict, Optional, AsyncGenerator
 from abc import ABC, abstractmethod
 from RAW.models import Image, LLMOutput, LLMCapability, Message
 from pydantic import BaseModel
-from RAW.logger import Logger
+from RAW.utils import Logger
 
 class LLMOptions(BaseModel):
     ...

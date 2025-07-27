@@ -3,7 +3,6 @@ import asyncio
 from typing import Any, Dict, Optional, Iterable, AsyncIterable, Set, Union
 from types import TracebackType
 from .logger import Logger
-from pathlib import Path
 
 class HTTPClient:
     HTTPStatusError = httpx.HTTPStatusError
@@ -16,7 +15,7 @@ class HTTPClient:
         self.headers = headers or {}
         self.timeout = timeout
         self.client_kwargs = client_kwargs
-        self.logger: Logger = logger if logger else Logger(log_file=Path("requests.log"))
+        self.logger: Logger = logger if logger else Logger()
         self.sync_client: Optional[httpx.Client] = None
         self.async_client: Optional[httpx.AsyncClient] = None
         self._tasks: Set[asyncio.Task] = set()

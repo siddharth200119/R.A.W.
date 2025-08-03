@@ -7,7 +7,6 @@
     - [x] Embedding support
 
 2. Utils
-    - [ ] pub sub state manager instead of globals
     - [ ] file viewers / loaders
     - [ ] RAG
         - [ ] Normal RAG
@@ -35,7 +34,9 @@
     - [x] Chatbot class
     - [ ] ChatBot Memory
         - [ ] Shortterm memory
-            - [ ] simple length based compression (length of messages is limited)
+            - [x] simple length based compression (length of messages is limited)
+                - [x] length based limit
+                - [x] context based limit
             - [ ] remove Tool messages
                 - [ ] just plain remove them
                 - [ ] add context in assistant messages to show they were removed but this is the summary of what he has done

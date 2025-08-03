@@ -1,11 +1,19 @@
 from RAW.agentic.llms import LLM
 from RAW.models import Tool, Message
 from RAW.utils import Logger
+from RAW.agentic.memory import ShortTermMemory
 
 from typing import List, Optional
 
 class ChatBot():
-    def __init__(self, llm: LLM, tools: List[Tool] = [], logger: Logger = Logger(), system_prompt: str = ''):
+    def __init__(
+            self, 
+            llm: LLM, 
+            short_term_memory: Optional[ShortTermMemory],
+            tools: List[Tool] = [], 
+            logger: Logger = Logger(), 
+            system_prompt: str = '',
+        ):
         self.logger = logger
         if(not llm):
             self.logger.error("Please provide and LLM")
@@ -13,6 +21,7 @@ class ChatBot():
         
         self.llm = llm
         self.tools = tools
+        self.short_term_memory = short_term_memory
 
         if(len(tools) > 0 and 'tools' not in self.llm.capabilities):
             self.logger.warning('the chosen LLM does not support tool calling skipping tools')
@@ -30,6 +39,9 @@ class ChatBot():
             self.logger.error("Message cannot be empty")
 
         self.messages.append(message)
+
+        if(self.short_term_memory):
+            self.messages = self.short_term_memory(messages=self.messages)
 
         if(stream):
             return self._call_stream(think)

@@ -33,9 +33,7 @@ class Logger:
         except:
             return "<unknown>", 0
 
-    def put(self, level: LogLevel, content: str, tags: Optional[List[str]] = None, 
-            track_id: Optional[uuid.UUID] = None, timestamp: Optional[datetime] = None,
-            error: Optional[Exception] = None):
+    def put(self, level: LogLevel, content: str, tags: Optional[List[str]] = None, timestamp: Optional[datetime] = None, error: Optional[Exception] = None):
         
         file_path, line_number = self._get_caller_info(stack_offset=3)
         
@@ -49,7 +47,6 @@ class Logger:
         
         entry: LogEntry = {
             "timestamp": timestamp or datetime.now(),
-            "track_id": track_id or uuid.uuid4(),
             "level": level,
             "content": content,
             "tags": tags or [],
@@ -79,14 +76,13 @@ class Logger:
             color = entry['level'].color
             reset = "\033[0m"
             timestamp = entry['timestamp'].strftime("%Y-%m-%d %H:%M:%S")
-            track_id = entry['track_id']
             level = entry['level'].name_str
             content = entry['content']
             tags = ', '.join(entry['tags'])
             file_path = Path(entry['file_path']).name  # Just filename for readability
             line_number = entry['line_number']
 
-            prefix = f"{color}[{timestamp}] [{track_id}] [{level}]{reset} "
+            prefix = f"{color}[{timestamp}] [{level}]{reset} "
             content_lines = content.splitlines()
 
             if content_lines:
@@ -119,12 +115,11 @@ class Logger:
 
             self.queue.task_done()
     
-    def debug(self, content: str, tags: Optional[List[str]] = None, track_id: Optional[uuid.UUID] = None, timestamp: Optional[datetime] = None):
+    def debug(self, content: str, tags: Optional[List[str]] = None, timestamp: Optional[datetime] = None):
         """Log a debug message"""
         file_path, line_number = self._get_caller_info(stack_offset=2)
         entry: LogEntry = {
             "timestamp": timestamp or datetime.now(),
-            "track_id": track_id or uuid.uuid4(),
             "level": LogLevel.DEBUG,
             "content": content,
             "tags": tags or [],
@@ -138,12 +133,11 @@ class Logger:
             sys.stderr.write("⚠️ Logger queue is full. Dropping log entry.\n")
             sys.stderr.flush()
 
-    def info(self, content: str, tags: Optional[List[str]] = None, track_id: Optional[uuid.UUID] = None, timestamp: Optional[datetime] = None):
+    def info(self, content: str, tags: Optional[List[str]] = None, timestamp: Optional[datetime] = None):
         """Log an info message"""
         file_path, line_number = self._get_caller_info(stack_offset=2)
         entry: LogEntry = {
             "timestamp": timestamp or datetime.now(),
-            "track_id": track_id or uuid.uuid4(),
             "level": LogLevel.INFO,
             "content": content,
             "tags": tags or [],
@@ -157,12 +151,11 @@ class Logger:
             sys.stderr.write("⚠️ Logger queue is full. Dropping log entry.\n")
             sys.stderr.flush()
 
-    def warning(self, content: str, tags: Optional[List[str]] = None, track_id: Optional[uuid.UUID] = None, timestamp: Optional[datetime] = None):
+    def warning(self, content: str, tags: Optional[List[str]] = None, timestamp: Optional[datetime] = None):
         """Log a warning message"""
         file_path, line_number = self._get_caller_info(stack_offset=2)
         entry: LogEntry = {
             "timestamp": timestamp or datetime.now(),
-            "track_id": track_id or uuid.uuid4(),
             "level": LogLevel.WARNING,
             "content": content,
             "tags": tags or [],
@@ -176,7 +169,7 @@ class Logger:
             sys.stderr.write("⚠️ Logger queue is full. Dropping log entry.\n")
             sys.stderr.flush()
 
-    def error(self, content: str, tags: Optional[List[str]] = None, track_id: Optional[uuid.UUID] = None, timestamp: Optional[datetime] = None, error: Optional[Exception] = None):
+    def error(self, content: str, tags: Optional[List[str]] = None, timestamp: Optional[datetime] = None, error: Optional[Exception] = None):
         """Log an error message with optional exception traceback"""
         file_path, line_number = self._get_caller_info(stack_offset=2)
         
@@ -187,7 +180,6 @@ class Logger:
         
         entry: LogEntry = {
             "timestamp": timestamp or datetime.now(),
-            "track_id": track_id or uuid.uuid4(),
             "level": LogLevel.ERROR,
             "content": content,
             "tags": tags or [],

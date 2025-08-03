@@ -7,14 +7,10 @@ from RAW.models import Image, Message, Tool
 
 class LLM(ABC):
     @abstractmethod
-    def __init__(self, logger: Logger, track_id: Optional[uuid.UUID]):
+    def __init__(self, logger: Logger,):
         super().__init__()
         self.logger = logger if logger else Logger()
         self.capabilities: List[Literal['thinking', 'tools', 'vision', 'embedding']] = []
-        if track_id:
-            self.track_id = track_id
-        else:
-            self.track_id = uuid.uuid4()
 
     @abstractmethod
     def generate(self, prompt: str, images: List[Image] = [], format: Optional[Union[str, Dict]] = None, think: bool = False, stream: bool = False):
@@ -32,7 +28,7 @@ class LLM(ABC):
         if 'thinking' in self.capabilities:
             return think
         elif think:
-            self.logger.warning(content="The LLM selected does not support thinking automatically switching to non thinking mode", track_id=self.track_id)
+            self.logger.warning(content="The LLM selected does not support thinking automatically switching to non thinking mode")
             return False
         else:
             return False
@@ -41,5 +37,5 @@ class LLM(ABC):
         if('vision' in self.capabilities):
             return image
         else:
-            self.logger.warning(content="The LLM selected does not support vision automatically skipping images", track_id=self.track_id)
+            self.logger.warning(content="The LLM selected does not support vision automatically skipping images")
             return

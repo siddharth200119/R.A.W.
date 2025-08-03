@@ -19,7 +19,6 @@ class LogLevel(Enum):
 
 class LogEntry(TypedDict):
     timestamp: datetime
-    track_id: uuid.UUID
     level: LogLevel
     content: str
     tags: List[str]

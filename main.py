@@ -9,15 +9,17 @@ import json
 
 logger = Logger()
 
-memory = ShortTermMemory(logger=logger, actionable_unit='length', actionable_quantity=5)
-
-chatbot = ChatBot(
-    llm=Ollama(
+llm = Ollama(
         capabilities=['tools', 'vision'],
         logger=logger,
         timeout=5000,
-        model='MrScarySpaceCat/gemma3-tools:4b'
-    ),
+        model='qwen3:0.6b'
+    )
+
+memory = ShortTermMemory(logger=logger, actionable_unit='length', actionable_quantity=3, summarize_to_system_prompt=True, llm=llm)
+
+chatbot = ChatBot(
+    llm=llm,
     system_prompt='You are a friendly neighbourhood assistant',
     logger=logger,
     short_term_memory=memory

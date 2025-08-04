@@ -40,9 +40,6 @@ class ChatBot():
 
         self.messages.append(message)
 
-        if(self.short_term_memory):
-            self.messages = self.short_term_memory(messages=self.messages)
-
         if(stream):
             return self._call_stream(think)
         else:
@@ -50,6 +47,9 @@ class ChatBot():
         
     
     async def _call_stream(self, think: bool = False):
+        if(self.short_term_memory):
+            self.messages = await self.short_term_memory(messages=self.messages)
+
         async for message in self.llm.chat(messages=self.messages, think=think, stream=True, tools=self.tools):
             yield message
 
@@ -57,6 +57,9 @@ class ChatBot():
         return
 
     async def _call_no_stream(self, think: bool = False):
+        if(self.short_term_memory):
+            self.messages = await self.short_term_memory(messages=self.messages)
+
         message = await self.llm.chat(messages=self.messages, think=think, stream=False, tools=self.tools)
         self.messages.append(message)
         return message

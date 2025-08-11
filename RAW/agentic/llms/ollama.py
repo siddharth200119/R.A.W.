@@ -166,6 +166,7 @@ class Ollama(LLM):
         try:
             response = await self.client.apost('/api/chat', json=body)
             response = response.json()
+            # print("response: ", response)
             message = response.get('message')
             if(not message):
                 self.logger.warning(content=f'no message received from the API, {response}')

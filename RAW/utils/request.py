@@ -89,7 +89,7 @@ class HTTPClient:
         if "json" in kwargs:
             log_data["json"] = kwargs["json"]
             
-        self.logger.info(f"Making request: {method} {url}, request: {log_data}")
+        # self.logger.info(f"Making request: {method} {url}, request: {log_data}")
 
     def _log_response(self, method: str, url: str, response: httpx.Response) -> None:
         """Log response details in a structured way"""
@@ -110,9 +110,9 @@ class HTTPClient:
             elif "text" in content_type:
                 log_data["text"] = response.text
                 
-            self.logger.info(
-                f"Received response: {response.status_code} for {method} {url}, response: {log_data}"
-            )
+            # self.logger.info(
+            #     f"Received response: {response.status_code} for {method} {url}, response: {log_data}"
+            # )
         except Exception as e:
             self.logger.warning(f"Failed to log response details: {str(e)}")
 
